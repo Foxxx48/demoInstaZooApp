@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         proxyTargetClass = true
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+    //public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JWTAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
