@@ -1,7 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.entity.User;
-import com.example.demo.services.CustomUserDetailService;
+import com.example.demo.services.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
     @Autowired
-    private CustomUserDetailService customUserDetailService;
+    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJWTFromRequest(httpServletRequest);
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                Long userId = jwtTokenProvider.getUserIDFromToken(jwt);
-                User userDetails = customUserDetailService.loadUserById(userId);
+                Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
+                User userDetails = customUserDetailsService.loadUserById(userId);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, Collections.emptyList()
@@ -52,7 +52,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private String getJWTFromRequest(HttpServletRequest request) {
         String bearToken = request.getHeader(SecurityConstants.HEADER_STRING);
         if (StringUtils.hasText(bearToken) && bearToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
-            return bearToken.split("")[1];
+            return bearToken.split(" ")[1];
 
         }
 

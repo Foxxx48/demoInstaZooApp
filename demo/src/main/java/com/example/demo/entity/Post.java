@@ -30,6 +30,10 @@ public class Post {
     @Column(updatable = false)
     private LocalDateTime createDate;
 
+    public Post() {
+    }
+
+
     @PrePersist
     protected void onCreate () {
         this.createDate = LocalDateTime.now();
